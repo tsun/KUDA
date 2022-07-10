@@ -464,11 +464,9 @@ if __name__ == "__main__":
     parser.add_argument('--pk_NC', type=int, default=None)
     parser.add_argument('--pk_noise', type=float, default=0.0)
     parser.add_argument('--pk_dratio', type=float, default=1.0)
-    parser.add_argument('--method', type=str, default="method")
+    parser.add_argument('--method', type=str, default="kshot")
 
     args = parser.parse_args()
-
-    args.method = '_'.join(sys.argv[0].split('.py')[0].split('_')[2:]).lower()
 
     if args.dset == 'office-home':
         args.names = ['Art', 'Clipart', 'Product', 'Real_World']

@@ -374,7 +374,7 @@ if __name__ == "__main__":
 
     dir = "{}_{}_{}_source".format(args.timestamp, args.s, args.da)
     if args.use_file_logger:
-        init_logger(dir, True, '../logs/SHOT/')
+        init_logger(dir, True, '../logs/SHOT/source/')
     logging.info("{}:{}".format(get_hostname(), get_pid()))
 
     folder = '../data/'

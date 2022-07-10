@@ -522,10 +522,9 @@ if __name__ == "__main__":
     parser.add_argument('--pk_temp', type=float, default=1.0)
     parser.add_argument('--pk_prior_weight', type=float, default=10.)
     parser.add_argument('--pk_knn', type=int, default=1)
-    parser.add_argument('--method', type=str, default="method")
+    parser.add_argument('--method', type=str, default="kdine")
 
     args = parser.parse_args()
-    args.method = '_'.join(sys.argv[0].split('.py')[0].split('_')[2:]).lower()
 
     if args.dset == 'office-home':
         args.names = ['Art', 'Clipart', 'Product', 'Real_World']

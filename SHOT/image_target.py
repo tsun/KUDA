@@ -419,7 +419,7 @@ if __name__ == "__main__":
 
     dir = "{}_{}_{}".format(args.timestamp, args.s, args.da)
     if args.use_file_logger:
-        init_logger(dir, True, '../logs/SHOT/')
+        init_logger(dir, True, '../logs/SHOT/shot/')
     logging.info("{}:{}".format(get_hostname(), get_pid()))
 
     for t in args.names:
