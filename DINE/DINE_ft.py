@@ -78,6 +78,25 @@ def data_load(args):
     txt_tar = open(args.t_dset_path).readlines()
     txt_test = open(args.test_dset_path).readlines()
 
+    if not args.da == 'uda':
+        label_map_s = {}
+        for i in range(len(args.src_classes)):
+            label_map_s[args.src_classes[i]] = i
+
+        new_tar = []
+        for i in range(len(txt_tar)):
+            rec = txt_tar[i]
+            reci = rec.strip().split(' ')
+            if int(reci[1]) in args.tar_classes:
+                if int(reci[1]) in args.src_classes:
+                    line = reci[0] + ' ' + str(label_map_s[int(reci[1])]) + '\n'
+                    new_tar.append(line)
+                else:
+                    line = reci[0] + ' ' + str(len(label_map_s)) + '\n'
+                    new_tar.append(line)
+        txt_tar = new_tar.copy()
+        txt_test = txt_tar.copy()
+
     dsets["target"] = ImageList_idx(txt_tar, root="../data/{}/".format(args.dset), transform=image_train())
     dset_loaders["target"] = DataLoader(dsets["target"], batch_size=train_bs, shuffle=True, num_workers=args.worker, drop_last=False)
     dsets["test"] = ImageList_idx(txt_test, root="../data/{}/".format(args.dset), transform=image_test())
@@ -126,7 +145,7 @@ def train_target(args):
         netF = network.ResBase(res_name=args.net).cuda()
         
     netB = network.feat_bootleneck(type=args.classifier, feature_dim=netF.in_features, bottleneck_dim=args.bottleneck).cuda()
-    netC = network.feat_classifier(type=args.layer, class_num = args.class_num, bottleneck_dim=args.bottleneck).cuda()
+    netC = network.feat_classifier(type=args.layer, class_num=args.class_num, bottleneck_dim=args.bottleneck).cuda()
    
     modelpath = osp.join(args.output_dir, "{}_{}_{}_{}_target_F".format(args.timestamp, args.s, args.t, args.net) + ".pt" )
     netF.load_state_dict(torch.load(modelpath))
@@ -160,9 +179,6 @@ def train_target(args):
         log_str = 'Task: {}->{}, Iter:{}/{}; Accuracy = {:.2f}%, Ent = {:.4f}'.format(args.s, args.t, iter_num, max_iter, acc_s_te,
                                                                                       mean_ent) + '\n' + acc_list
 
-    # args.out_file.write(log_str + '\n')
-    # args.out_file.flush()
-    # print(log_str+'\n')
     logging.info(log_str)
     netF.train()
     netB.train()
@@ -206,10 +222,8 @@ def train_target(args):
             if args.dset == 'visda-2017':
                 acc_s_te, acc_list, pry, mean_ent = cal_acc(dset_loaders['test'], netF, netB, netC, True)
                 log_str = 'Task: {}->{}, Iter:{}/{}; Accuracy = {:.2f}%, Ent = {:.4f}'.format(args.s, args.t, iter_num, max_iter, acc_s_te, mean_ent) + '\n' + acc_list
-            # args.out_file.write(log_str + '\n')
-            # args.out_file.flush()
-            # print(log_str+'\n')
             logging.info(log_str)
+
             netF.train()
             netB.train()
             netC.train()
@@ -267,6 +281,11 @@ if __name__ == "__main__":
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id
     resetRNGseed(args.seed)
 
+    if args.dset == 'office-home':
+        if args.da == 'pda':
+            args.class_num = 65
+            args.src_classes = [i for i in range(65)]
+            args.tar_classes = [33, 32, 36, 15, 19, 2, 46, 49, 48, 53, 47, 54, 4, 18, 57, 23, 0, 45, 1, 38, 5, 13, 50, 11, 58]
 
     if args.method is not None:
         dir = "{}_{}_{}_{}".format(args.timestamp, args.s, args.da, args.method)
@@ -275,7 +294,7 @@ if __name__ == "__main__":
     else:
         dir = "{}_{}_{}".format(args.timestamp, args.s, args.da)
         if args.use_file_logger:
-            init_logger(dir, True, '../logs//DINE/')
+            init_logger(dir, True, '../logs/DINE/')
     logging.info("{}:{}".format(get_hostname(), get_pid()))
 
     folder = '../data/'
