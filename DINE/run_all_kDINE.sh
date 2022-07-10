@@ -41,9 +41,6 @@ for seed in 2020 2021 2022; do
         python DINE_dist.py --gpu_id $gpu_id --seed $seed --dset office-home --s $src --da pda --net_src resnet50 --max_epoch 50 --timestamp $time
 
         python DINE_dist_kDINE.py --gpu_id $gpu_id --seed $seed --dset office-home --s $src --da pda --net_src resnet50 --max_epoch 30 --net resnet50  --distill --topk 1 --timestamp $time --pk_type ub --pk_uconf 0.0
-        python DINE_ft.py --gpu_id $gpu_id --seed $seed --dset office-home --s $src --da pda --net_src resnet50 --max_epoch 30 --net resnet50 --lr 1e-2  --timestamp $time --method kdine
-
         python DINE_dist_kDINE.py --gpu_id $gpu_id --seed $seed --dset office-home --s $src --da pda --net_src resnet50 --max_epoch 30 --net resnet50  --distill --topk 1 --timestamp $time --pk_type br --pk_uconf 1.0
-        python DINE_ft.py --gpu_id $gpu_id --seed $seed --dset office-home --s $src --da pda --net_src resnet50 --max_epoch 30 --net resnet50 --lr 1e-2  --timestamp $time --method kdine
     done
 done
