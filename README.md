@@ -16,7 +16,7 @@ The waive of labels in the target domain makes Unsupervised Domain Adaptation (U
 ## Usage
 ### Prerequisites
 
-We experimented with python==3.8, pytorch==1.8.0, cudatoolkit==11.1.
+We experimented with python==3.8, pytorch==1.8.0, cudatoolkit==11.1, gurobi==9.5.0.
 
 For Zero-One programming, we use [Gurobi Optimizer](https://www.gurobi.com/). A free [academic license](https://www.gurobi.com/academia/academic-program-and-licenses/) can be obtained from its official website. 
 
@@ -47,11 +47,11 @@ for src in "Product" "Clipart" "Art" "Real_World"; do
     python image_source.py --trte val --da uda --gpu_id $gpu_id --dset office-home --max_epoch 50 --s $src --timestamp $time
 done
 
-# adaptation to other target domains with Unary Bound prior knowledge
+# adapt to other target domains with Unary Bound prior knowledge
 for seed in 2020 2021 2022; do
     for src in "Product" "Clipart" "Art" "Real_World"; do
         echo $src
-        python image_target_kSHOT.py --cls_par 0.3 --da uda --gpu_id $gpu_id --dset office-home --s $src --timestamp $time --pk_uconf 0.0 --pk_temp 1.0 --seed $seed --pk_type ub
+        python image_target_kSHOT.py --cls_par 0.3 --da uda --gpu_id $gpu_id --dset office-home --s $src --timestamp $time --pk_uconf 0.0 --seed $seed --pk_type ub
     done
 done
 ```
