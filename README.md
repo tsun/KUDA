@@ -1,6 +1,6 @@
 # KUDA
 Pytorch implementation of KUDA. 
-> [Prior Knowledge Guided Unsupervised Domain Adaptation](https://arxiv.org/abs/xxxx.xxxx)                 
+> [Prior Knowledge Guided Unsupervised Domain Adaptation](https://arxiv.org/abs/2207.08877)                 
 > Tao Sun, Cheng Lu, and Haibin Ling                 
 > *ECCV 2022* 
 
