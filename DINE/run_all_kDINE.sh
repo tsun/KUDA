@@ -1,7 +1,7 @@
 #!/bin/bash
 
 gpu_id=0
-time=`python ../utils/get_time.py`
+time=`python ../util/get_time.py`
 
 # office31 -------------------------------------------------------------------------------------------------------------
 for seed in 2020 2021 2022; do
